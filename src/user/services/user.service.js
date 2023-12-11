@@ -1,8 +1,11 @@
 import {getAll} from "../../consultation/dao/consultation.dao.js";
-import { findUserByEmail } from "../dao/user.dao.js";
+import { validationResult } from "express-validator";
+import { findUserByEmail, update } from "../dao/user.dao.js";
+import { v2 } from "cloudinary";
+
 export async function findAll(req, res) {
-    const userEmail = req.query.email;
-    //let condition = name ? { name: { $regex: new RegExp(name), $options: "i" } } : {};
+  const userEmail = req.query.email;
+    
     // Recherche de l'utilisateur par son adresse e-mail
     const patient = await findUserByEmail(userEmail);
     if (!patient ) {
@@ -18,10 +21,8 @@ export async function findAll(req, res) {
           message: err.message || "Some error occurred while retrieving consultations",
         });
       });
-  };
-import { validationResult } from "express-validator";
-import { findUserByEmail, update } from "../dao/user.dao.js";
-import { v2 } from "cloudinary";
+};
+
 
 export const updateUserInfos = async (request, response) => {
   try {

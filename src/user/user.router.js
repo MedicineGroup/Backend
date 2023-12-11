@@ -3,13 +3,6 @@ dotenv.config();
 
 import { Router } from "express";
 import { findAll} from "./services/user.service.js";
-
-
-const userRouter = Router();
-userRouter.get('/consultations', findAll);
-export { userRouter };
-import { Router } from "express";
-
 import { checkSchema } from "express-validator";
 import {
   getUserInfos,
@@ -19,6 +12,10 @@ import {
 import multer from "multer";
 
 const router = Router();
+
+router.get('/consultations', findAll);
+
+
 const storage = multer.diskStorage({
   destination: "uploads",
   filename: (req, file, cb) => {

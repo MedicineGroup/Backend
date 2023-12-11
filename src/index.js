@@ -8,7 +8,6 @@ import { expressjwt } from "express-jwt";
 import { v2 } from "cloudinary";
 
 const app = Express();
-
 dotenv.config();
 
 app.use(cors());
@@ -16,12 +15,11 @@ app.use(cors());
 app.use(Express.json());
 
 app.use("/auth", authRouter);
+// Apply authentication middleware to all routes under "/user"
+app.use("/user", expressjwt({ secret: process.env.SECRET || 'Bearer', algorithms: ["HS256"] }));
 app.use("/user", userRouter);
-app.use(
-  "/user",
-  expressjwt({ secret: process.env.SECRET, algorithms: ["HS256"] }),
-  userRouter
-);
+
+
 
 app.listen(8888, async () => {
   await connectToDB();
