@@ -19,3 +19,15 @@ export const addUser = async (newUser) => {
     throw new Error(error);
   }
 };
+
+export const update = async (email, userInfos) => {
+  try {
+    const updatedUser = await User.findOneAndUpdate({ email }, userInfos, {
+      new: true,
+    });
+    return updatedUser._doc;
+  } catch (error) {
+    console.log("Error in User DAO: updateUserInfos: ", error);
+    throw new Error(error);
+  }
+};

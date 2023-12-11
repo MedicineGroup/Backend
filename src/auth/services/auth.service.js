@@ -11,7 +11,7 @@ export async function signupAction(request, response) {
     //verifier s'il y'a des erreurs dans les donnees envoyer par le frontend.
     if (!errors.isEmpty()) {
       //si oui on renvoie un les erreurs trouvees.
-      return response.status(422).json({ error: errors.array() });
+      return response.status(422).json({ message: errors.array() });
     }
     const userWithSameEmail = await findUserByEmail(request.body.email);
     //verifier s'il existe un utilisteur avec le meme email ou username
