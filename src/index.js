@@ -1,5 +1,6 @@
 import Express from "express";
 import { router as authRouter } from "./auth/auth.router.js";
+import{userRouter} from "./user/user.router.js"
 import cors from "cors";
 import connectToDB from "./config/db.config.js";
 import * as dotenv from "dotenv";
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(Express.json());
 
 app.use("/auth", authRouter);
+app.use("/user", userRouter);
 
 app.listen(8888, async () => {
   await connectToDB();

@@ -2,7 +2,8 @@ import User from "../models/user.model.js";
 
 export const findUserByEmail = async (email) => {
   try {
-    return await User.findOne({ email });
+    const user= await User.findOne({ email });
+    return user;
   } catch (error) {
     console.log("Error in User DAO: findUserByEmail: ", error.message);
     throw new Error(error);

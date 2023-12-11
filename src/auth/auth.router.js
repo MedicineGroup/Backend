@@ -45,7 +45,7 @@ router.post("/signup", checkSchema(signupValidationSchema), signupAction);
 router.post("/login", checkSchema(loginValidationSchema), loginAction);
 router.get(
   "/logout",
-  expressjwt({ secret: process.env.SECRET, algorithms: ["HS256"] }),
+  expressjwt({ secret: process.env.SECRET || 'Bearer', algorithms: ["HS256"] }),
   logoutAction
 );
 

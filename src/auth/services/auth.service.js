@@ -30,7 +30,7 @@ export async function signupAction(request, response) {
     const createdUser = await addUser(user);
     //creer un jwt pour l'utilisateur
     const { password, _id, __v, ...payload } = createdUser._doc;
-    const token = jwt.sign(payload, process.env.SECRET);
+    const token = jwt.sign(payload, process.env.SECRET || 'Bearer');
     //envoyer une reponse avec les infos de l'utilisateur
     return response.status(201).json({ user: payload, token });
   } catch (error) {
@@ -62,7 +62,7 @@ export async function loginAction(request, response) {
     const { password, _id, __v, ...payload } = user._doc;
 
     // Génère un token JWT avec les données de l'utilisateur
-    const token = jwt.sign(payload, process.env.SECRET);
+    const token = jwt.sign(payload, process.env.SECRET || 'Bearer');
     // Retourne une réponse avec un statut 200 (OK) et le token généré
     return response.status(200).json({ user: payload, token });
   } catch (error) {
