@@ -1,6 +1,7 @@
 import Express from "express";
 import { router as authRouter } from "./auth/auth.router.js";
 import { router as userRouter } from "./user/user.router.js";
+import { router as serviceRouter } from "./service/service.router.js";
 import cors from "cors";
 import connectToDB from "./config/db.config.js";
 import * as dotenv from "dotenv";
@@ -21,6 +22,9 @@ app.use(
   expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),
   userRouter
 );
+app.use("/service",
+ expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),
+serviceRouter);
 
 app.listen(8888, async () => {
   await connectToDB();
