@@ -13,11 +13,11 @@ dotenv.config();
 
 const signupValidationSchema = {
   firstname: {
-    isAlphanumeric: true,
+    isString: true,
     errorMessage: "firstname format is invalid",
   },
   lastname: {
-    isAlphanumeric: true,
+    isString: true,
     errorMessage: "lastname format is invalid",
   },
   email: {
@@ -25,7 +25,7 @@ const signupValidationSchema = {
     errorMessage: "Email Format is invalid",
   },
   password: {
-    isAlphanumeric: true,
+    isString: true,
     errorMessage: "Password format is invalid",
   },
 };
@@ -36,7 +36,7 @@ const loginValidationSchema = {
     errorMessage: "Email Format is invalid",
   },
   password: {
-    isAlphanumeric: true,
+    isString: true,
     errorMessage: "Password format is invalid",
   },
 };
