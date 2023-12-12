@@ -2,19 +2,16 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import { Router } from "express";
-import { findAll} from "./services/user.service.js";
 import { checkSchema } from "express-validator";
 import {
   getUserInfos,
   updateUserInfos,
   updateUserProfileImage,
+  getAllConsultations,
 } from "./services/user.service.js";
 import multer from "multer";
 
 const router = Router();
-
-router.get('/consultations', findAll);
-
 
 const storage = multer.diskStorage({
   destination: "uploads",
@@ -58,6 +55,8 @@ router.post(
   upload.single("profileImage"),
   updateUserProfileImage
 );
+
+router.get("/consultations", getAllConsultations);
 
 router.get("/get-infos", getUserInfos);
 

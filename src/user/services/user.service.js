@@ -1,28 +1,27 @@
-import {getAll} from "../../consultation/dao/consultation.dao.js";
+import { getAll } from "../../consultation/dao/consultation.dao.js";
 import { validationResult } from "express-validator";
 import { findUserByEmail, update } from "../dao/user.dao.js";
 import { v2 } from "cloudinary";
 
-export async function findAll(req, res) {
-  const userEmail = req.query.email;
-    
+export async function getAllConsultations(request, response) {
+  try {
+    const userEmail = request.auth.email;
+
     // Recherche de l'utilisateur par son adresse e-mail
     const patient = await findUserByEmail(userEmail);
-    if (!patient ) {
+    if (!patient) {
       // Retourne une réponse avec un statut 401 (Non autorisé) et un message d'erreur
       return response.status(404).json({ message: "User doesn't found" });
     }
-    getAll(patient)
-      .then((data) => {
-        res.send(data);
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message: err.message || "Some error occurred while retrieving consultations",
-        });
-      });
-};
-
+    const consultations = await getAll(patient);
+    return response.status(200).json({ consultations });
+  } catch (error) {
+    console.log(error);
+    response.status(500).send({
+      message: "An internal Server error has occured",
+    });
+  }
+}
 
 export const updateUserInfos = async (request, response) => {
   try {
