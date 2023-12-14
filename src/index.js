@@ -8,6 +8,11 @@ import connectToDB from "./config/db.config.js";
 import * as dotenv from "dotenv";
 import { expressjwt } from "express-jwt";
 import { v2 } from "cloudinary";
+import {
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET,
+  CLOUDINARY_CLOUD_NAME,
+} from "../env.js";
 import { seedServices } from "./service/models/service.model.js";
 
 const app = Express();
@@ -24,20 +29,24 @@ app.use(
   expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),
   userRouter
 );
-app.use("/service",
- expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),
-serviceRouter);
+app.use(
+  "/service",
+  expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),
+  serviceRouter
+);
 
-app.use("/doctor",
- expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),
-doctorRouter);
+app.use(
+  "/doctor",
+  expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),
+  doctorRouter
+);
 app.listen(8888, async () => {
   await connectToDB();
   await seedServices();
   v2.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME || CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY || CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET || CLOUDINARY_API_SECRET,
   });
   console.log("server is running on: http://localhost:8888");
 });

@@ -9,8 +9,8 @@ const Doctor = model(
     email: String,
     password: String,
     image: String,
-    serviceId: {
-      type: Schema.Types.ObjectId,
+    service: {
+      type: Schema.Types.String,
       ref: "Service", // Référence au modèle Service
     },
   })
