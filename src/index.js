@@ -8,6 +8,7 @@ import connectToDB from "./config/db.config.js";
 import * as dotenv from "dotenv";
 import { expressjwt } from "express-jwt";
 import { v2 } from "cloudinary";
+import { seedServices } from "./service/models/service.model.js";
 
 const app = Express();
 dotenv.config();
@@ -32,6 +33,7 @@ app.use("/doctor",
 doctorRouter);
 app.listen(8888, async () => {
   await connectToDB();
+  await seedServices();
   v2.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,

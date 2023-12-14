@@ -6,6 +6,9 @@ const Doctor = model(
   new Schema({
     nom: String,
     detail: String,
+    email: String,
+    password: String,
+    image: String,
     serviceId: {
       type: Schema.Types.ObjectId,
       ref: "Service", // Référence au modèle Service
