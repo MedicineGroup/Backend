@@ -12,9 +12,9 @@ class DoctorDAO {
     }
   }
 
-  static async getAllDoctorsByServiceId(serviceId) {
+  static async getAllDoctorsByService(service) {
     try {
-      const doctors = await Doctor.find({ serviceId });
+      const doctors = await Doctor.find({ service});
       return doctors;
     } catch (error) {
       throw new Error(error.message);
