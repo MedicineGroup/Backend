@@ -46,9 +46,9 @@ app.listen(8888, async () => {
   await seedServices();
   await seedDoctors();
   v2.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME ,
-    api_key: process.env.CLOUDINARY_API_KEY ,
-    api_secret: process.env.CLOUDINARY_API_SECRET ,
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME || CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY || CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET || CLOUDINARY_API_SECRET,
   });
   console.log("server is running on: http://localhost:8888");
 });
