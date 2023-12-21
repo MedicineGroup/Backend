@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   loginAction,
+  loginDoctor,
   logoutAction,
   signupAction,
 } from "./services/auth.service.js";
@@ -43,6 +44,7 @@ const loginValidationSchema = {
 
 router.post("/signup", checkSchema(signupValidationSchema), signupAction);
 router.post("/login", checkSchema(loginValidationSchema), loginAction);
+router.post("/login-doctor",checkSchema(loginValidationSchema),loginDoctor)
 router.get(
   "/logout",
   expressjwt({ secret: process.env.SECRET || 'Bearer', algorithms: ["HS256"] }),
