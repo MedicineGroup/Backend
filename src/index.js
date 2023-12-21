@@ -15,6 +15,7 @@ import {
 } from "../env.js";
 import { seedServices } from "./service/models/service.model.js";
 import { seedDoctors } from "./doctor/models/doctor.model.js";
+import { addAnalyse, getFiles } from "./consultation/services/consultation.service.js";
 
 const app = Express();
 dotenv.config();
@@ -41,6 +42,10 @@ app.use(
   expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),
   doctorRouter
 );
+
+app.post("/upload-files", expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),addAnalyse);
+app.use("/files",Express.static("files"))
+app.get("/get-files", getFiles);
 app.listen(8888, async () => {
   await connectToDB();
   await seedServices();
