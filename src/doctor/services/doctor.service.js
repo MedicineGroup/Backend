@@ -1,5 +1,4 @@
 // services/doctor.service.js
-import { getAllDoctorsByService } from "../dao/doctor.dao.js";
 import {
   getAllDoctorsByService,
   getPatientsByDoctorEmail,

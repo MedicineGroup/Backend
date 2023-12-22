@@ -20,3 +20,45 @@ export const getAllDoctorsByService = async (service) => {
     throw new Error(error.message);
   }
 };
+
+export const getConsultationsDatesByDoctorID = async (doctorId) => {
+  try {
+    return await Consultation.find({
+      doctor: doctorId,
+    }).select("date startTime duration");
+  } catch (error) {
+    const msg =
+      "Error in Doctor DAO: getConsultationsDatesByDoctorID: " + error;
+    console.log(msg);
+    throw new Error(msg);
+  }
+};
+
+export const getBookedTimesByDoctorAndDate = async (doctorId, date) => {
+  try {
+    return await Consultation.find({
+      doctor: doctorId,
+      date,
+    }).select("startTime duration");
+  } catch (error) {
+    const msg = "Error in Doctor DAO: getBookedTimesByDoctorAndDate: " + error;
+    console.log(msg);
+    throw new Error(msg);
+  }
+};
+
+export const getPatientsByDoctorEmail = async (email) => {
+  try {
+    // Recherche du médecin par e-mail
+    const doctor = await Doctor.findOne({ email });
+    if (doctor) {
+      console.log(doctor);
+      const patientDetails = await User.find({ _id: { $in: doctor.patients } });
+      return patientDetails;
+    } else {
+      throw new Error("Doctor not found");
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
