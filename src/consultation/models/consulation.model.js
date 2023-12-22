@@ -4,12 +4,17 @@ const Consultation = model(
   "Consultation",
   new Schema({
     date: Date,
-    doctor: String,
     state: String,
-    patient:{
-        type: Schema.Types.ObjectId,
-        ref:"User"
-    } 
+    startTime: String,
+    duration: { type: Number, enum: [15, 30], default: 30 },
+    doctor: {
+      type: Schema.Types.ObjectId,
+      ref: "Doctor",
+    },
+    patient: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   })
 );
 

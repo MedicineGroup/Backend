@@ -8,6 +8,9 @@ import {
   updateUserInfos,
   updateUserProfileImage,
   getAllConsultations,
+  getFullBookedDatesByDoctorId,
+  bookedTimesByDoctorAndDate,
+  bookConsultation,
 } from "./services/user.service.js";
 import multer from "multer";
 
@@ -59,5 +62,11 @@ router.post(
 router.get("/consultations", getAllConsultations);
 
 router.get("/get-infos", getUserInfos);
+
+router.get("/fully-booked-dates", getFullBookedDatesByDoctorId);
+
+router.get("/booked-times", bookedTimesByDoctorAndDate);
+
+router.post("/save-appointment", bookConsultation);
 
 export { router };

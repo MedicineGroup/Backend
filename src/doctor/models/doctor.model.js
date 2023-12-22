@@ -14,6 +14,12 @@ const Doctor = model(
       type: Schema.Types.String,
       ref: "Service", // Référence au modèle Service
     },
+    patients: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   })
 );
 
