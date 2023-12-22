@@ -1,10 +1,10 @@
 import { validationResult } from "express-validator";
 import { findUserByEmail, addUser } from "../../user/dao/user.dao.js";
+import {findAssistantByEmail, addAssistant} from "../../assistant/dao/assistant.dao.js";
 import { hashPassword } from "../../utils/auth.utils.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { findDoctorByEmail } from "../../doctor/dao/doctor.dao.js";
-
 //fonction pour effectuter le signup d'un nouveau utilisateur
 export async function signupAction(request, response) {
   try {
@@ -40,6 +40,43 @@ export async function signupAction(request, response) {
     return response.status(500).json("An error occured in the server");
   }
 }
+
+//fonction pour effectuter le signup d'un nouveau assistamt
+export async function signupAssistantAction(request, response) {
+  try {
+    const errors = validationResult(request);
+    //verifier s'il y'a des erreurs dans les donnees envoyer par le frontend.
+    if (!errors.isEmpty()) {
+      //si oui on renvoie un les erreurs trouvees.
+      return response.status(422).json({ message: errors.array() });
+    }
+    const assistantWithSameEmail = await findAssistantByEmail(request.body.email);
+    //verifier s'il existe un utilisteur avec le meme email ou username
+    if (assistantWithSameEmail) {
+      //si oui on envoie une erreur
+      return response.status(401).json({
+        message: "A user with the same email or username already exists",
+      });
+    }
+    //si tous les verification passent on continue
+    //recuperer les infos dans la requete
+    const assistant = { ...request.body };
+    //encrypter le mot de passe
+    assistant.password = await hashPassword(assistant.password);
+    //enregistrer l'utilisateur dans la base de donnees.
+    const createdAssistant = await addAssistant(assistant);
+    //creer un jwt pour l'utilisateur
+    const { password, _id, __v, ...payload } = createdAssistant._doc;
+    const token = jwt.sign(payload, process.env.SECRET || 'Bearer');
+    //envoyer une reponse avec les infos de l'utilisateur
+    return response.status(201).json({ user: payload, token });
+  } catch (error) {
+    console.log(error);
+    //en cas d'erreur on envoie un message d'erreur du code 500
+    return response.status(500).json("An error occured in the server");
+  }
+}
+
 
 // Fonction asynchrone pour gérer l'action de connexion
 export async function loginAction(request, response) {

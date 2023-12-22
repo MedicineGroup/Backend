@@ -4,6 +4,7 @@ import {
   loginDoctor,
   logoutAction,
   signupAction,
+  signupAssistantAction,
 } from "./services/auth.service.js";
 import { checkSchema } from "express-validator";
 import { expressjwt } from "express-jwt";
@@ -43,6 +44,7 @@ const loginValidationSchema = {
 };
 
 router.post("/signup", checkSchema(signupValidationSchema), signupAction);
+router.post("/signupAssistant", checkSchema(signupValidationSchema), signupAssistantAction);
 router.post("/login", checkSchema(loginValidationSchema), loginAction);
 router.post("/login-doctor",checkSchema(loginValidationSchema),loginDoctor)
 router.get(
