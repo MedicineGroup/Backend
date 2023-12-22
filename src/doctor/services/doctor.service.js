@@ -1,5 +1,5 @@
 // services/doctor.service.js
-import { getAllDoctorsByService } from "../dao/doctor.dao.js";
+import { getAllDoctorsByService ,getPatientsByDoctorEmail} from "../dao/doctor.dao.js";
 
 
 export const getAllDoctorsByServices = async (req, res) => {
@@ -12,3 +12,15 @@ export const getAllDoctorsByServices = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getPatientsByDoctorEmailService = async (req, res) => {
+  try {
+    const { email } = req.query; // Assurez-vous que doctorEmail est passé en tant que paramètre dans votre route
+
+    const patients = await getPatientsByDoctorEmail(email);
+    res.status(200).json({ patients });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+

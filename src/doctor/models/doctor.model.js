@@ -14,6 +14,10 @@ const Doctor = model(
       type: Schema.Types.String,
       ref: "Service", // Référence au modèle Service
     },
+    patients: [{
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    }],
   })
 );
 
@@ -27,6 +31,7 @@ const doctorsData = [
     email: "dr.smith@example.com",
     password: "password123",
     service: "Cardiology",
+    patients: ["65786ab5ebbee4ee27b51ac3","6585839ff4d595e5b2f7a644"]
   },
   {
     nom: "Dr. Johnson",
@@ -34,6 +39,7 @@ const doctorsData = [
     email: "dr.johnson@example.com",
     password: "password456",
     service: "Cardiology",
+    patients: ["65786ab5ebbee4ee27b51ac3"]
   },
   {
     nom: "Dr. Williams",
@@ -41,6 +47,7 @@ const doctorsData = [
     email: "dr.williams@example.com",
     password: "password789",
     service: "Cardiology",
+    patients: ["65786ab5ebbee4ee27b51ac3"]
   },
 
   // Endocrinology
@@ -50,6 +57,7 @@ const doctorsData = [
     email: "dr.davis@example.com",
     password: "password321",
     service: "Endocrinology",
+    patients: ["65786ab5ebbee4ee27b51ac3"]
   },
   {
     nom: "Dr. Brown",
@@ -57,6 +65,7 @@ const doctorsData = [
     email: "dr.brown@example.com",
     password: "password654",
     service: "Endocrinology",
+    patients: ["65786ab5ebbee4ee27b51ac3"]
   },
   {
     nom: "Dr. Miller",
@@ -64,6 +73,7 @@ const doctorsData = [
     email: "dr.miller@example.com",
     password: "password987",
     service: "Endocrinology",
+    patients: ["65786ab5ebbee4ee27b51ac3"]
   },
 
   // Rheumatology
@@ -73,6 +83,7 @@ const doctorsData = [
     email: "dr.wilson@example.com",
     password: "password135",
     service: "Rheumatology",
+    patients: ["65786ab5ebbee4ee27b51ac3"]
   },
   {
     nom: "Dr. Moore",
@@ -80,6 +91,7 @@ const doctorsData = [
     email: "dr.moore@example.com",
     password: "password246",
     service: "Rheumatology",
+    patients: ["65786ab5ebbee4ee27b51ac3"]
   },
   {
     nom: "Dr. Taylor",
@@ -87,6 +99,7 @@ const doctorsData = [
     email: "dr.taylor@example.com",
     password: "password789",
     service: "Rheumatology",
+    patients: ["65786ab5ebbee4ee27b51ac3"]
   },
 ];
 
