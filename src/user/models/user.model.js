@@ -11,6 +11,12 @@ const User = model(
     dateOfBirth: Date,
     address: String,
     gender: String,
+    doctors: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Doctor",
+      },
+    ],
   })
 );
 
