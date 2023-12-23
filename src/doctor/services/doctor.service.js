@@ -1,3 +1,4 @@
+// services/doctor.service.js
 import {
   getAllDoctorsByService,
   getPatientsByDoctorEmail,
