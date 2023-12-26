@@ -154,6 +154,7 @@ export const bookedTimesByDoctorAndDate = async (request, response) => {
     }
     const { doctorId, date } = request.query;
     const bookedTimes = await getBookedTimesByDoctorAndDate(doctorId, date);
+    console.log(doctorId);
     return response.status(200).json({ bookedTimes });
   } catch (error) {
     console.log(error);

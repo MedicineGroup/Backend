@@ -36,10 +36,13 @@ export const getConsultationsDatesByDoctorID = async (doctorId) => {
 
 export const getBookedTimesByDoctorAndDate = async (doctorId, date) => {
   try {
+    const nextDate = new Date(date);
+    nextDate.setDate(nextDate.getDate() + 1); // Get the next day
+
     return await Consultation.find({
       doctor: doctorId,
-      date,
-    }).select("startTime duration");
+      date: { $gte: new Date(date), $lt: nextDate },
+    }).select("startTime");
   } catch (error) {
     const msg = "Error in Doctor DAO: getBookedTimesByDoctorAndDate: " + error;
     console.log(msg);
