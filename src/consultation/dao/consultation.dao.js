@@ -17,3 +17,34 @@ export const addConsultation = async (newConsultation) => {
     throw new Error(err);
   }
 };
+
+export const getConsultationsDatesByDoctorID = async (doctorId) => {
+  try {
+    return await Consultation.find({
+      doctor: doctorId,
+    }).select("date startTime duration");
+  } catch (error) {
+    const msg =
+      "Error in Doctor DAO: getConsultationsDatesByDoctorID: " + error;
+    console.log(msg);
+    throw new Error(msg);
+  }
+};
+
+export const getDoctorConsultationByDateRange = async (
+  doctorId,
+  maxDate,
+  minDate
+) => {
+  try {
+    return await Consultation.find({
+      doctor: doctorId,
+      date: { $gte: minDate, $lt: maxDate },
+    }).select("startTime -_id");
+  } catch (error) {
+    const msg =
+      "Error in Doctor DAO: getDoctorConsultationByDateRange: " + error;
+    console.log(msg);
+    throw new Error(msg);
+  }
+};

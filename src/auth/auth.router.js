@@ -9,6 +9,7 @@ import {
 import { checkSchema } from "express-validator";
 import { expressjwt } from "express-jwt";
 import * as dotenv from "dotenv";
+import { checkSchemaValidityMiddleware } from "../middlewares/common.middleware.js";
 
 const router = Router();
 dotenv.config();
@@ -43,13 +44,33 @@ const loginValidationSchema = {
   },
 };
 
-router.post("/signup", checkSchema(signupValidationSchema), signupAction);
-router.post("/signupAssistant", checkSchema(signupValidationSchema), signupAssistantAction);
-router.post("/login", checkSchema(loginValidationSchema), loginAction);
-router.post("/login-doctor",checkSchema(loginValidationSchema),loginDoctor)
+router.post(
+  "/signup",
+  checkSchema(signupValidationSchema),
+  checkSchemaValidityMiddleware,
+  signupAction
+);
+router.post(
+  "/signupAssistant",
+  checkSchema(signupValidationSchema),
+  checkSchemaValidityMiddleware,
+  signupAssistantAction
+);
+router.post(
+  "/login",
+  checkSchema(loginValidationSchema),
+  checkSchemaValidityMiddleware,
+  loginAction
+);
+router.post(
+  "/login-doctor",
+  checkSchema(loginValidationSchema),
+  checkSchemaValidityMiddleware,
+  loginDoctor
+);
 router.get(
   "/logout",
-  expressjwt({ secret: process.env.SECRET || 'Bearer', algorithms: ["HS256"] }),
+  expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),
   logoutAction
 );
 

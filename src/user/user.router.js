@@ -4,7 +4,6 @@ dotenv.config();
 import { Router } from "express";
 import { checkSchema } from "express-validator";
 import {
-  getUserInfos,
   updateUserInfos,
   updateUserProfileImage,
   getAllConsultations,
@@ -13,6 +12,7 @@ import {
   bookConsultation,
 } from "./services/user.service.js";
 import multer from "multer";
+import { checkSchemaValidityMiddleware } from "../middlewares/common.middleware.js";
 
 const router = Router();
 
@@ -50,6 +50,7 @@ const userInfosValidationSchema = {
 router.post(
   "/update-infos",
   checkSchema(userInfosValidationSchema),
+  checkSchemaValidityMiddleware,
   updateUserInfos
 );
 
@@ -60,8 +61,6 @@ router.post(
 );
 
 router.get("/consultations", getAllConsultations);
-
-router.get("/get-infos", getUserInfos);
 
 router.get("/fully-booked-dates", getFullBookedDatesByDoctorId);
 
