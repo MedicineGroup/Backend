@@ -9,6 +9,7 @@ import {
   getConsultationsDatesByDoctorID,
   getBookedTimesByDoctorAndDate,
 } from "../../doctor/dao/doctor.dao.js";
+import { Schema, Types } from "mongoose";
 
 export async function getAllConsultations(request, response) {
   try {
@@ -174,7 +175,9 @@ export const bookConsultation = async (request, response) => {
         .json({ message: "No user with this email was found" });
     }
     const consultation = { ...request.body };
-    consultation.patient = user._id;
+    consultation.patient = new Types.ObjectId(user._id);
+    consultation.doctor = new Types.ObjectId(consultation.doctor);
+    consultation.state = "Waiting to see doctor";
     const createdConsultations = await addConsultation(consultation)._doc;
     return response.status(200).json({ createdConsultations });
   } catch (error) {

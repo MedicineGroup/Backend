@@ -34,14 +34,15 @@ export const getConsultationsDatesByDoctorID = async (doctorId) => {
   }
 };
 
-export const getBookedTimesByDoctorAndDate = async (doctorId, date) => {
+export const getBookedTimesByDoctorAndDate = async (
+  doctorId,
+  maxDate,
+  minDate
+) => {
   try {
-    const nextDate = new Date(date);
-    nextDate.setDate(nextDate.getDate() + 1); // Get the next day
-
     return await Consultation.find({
       doctor: doctorId,
-      date: { $gte: new Date(date), $lt: nextDate },
+      date: { $gte: minDate, $lt: maxDate },
     }).select("startTime");
   } catch (error) {
     const msg = "Error in Doctor DAO: getBookedTimesByDoctorAndDate: " + error;
@@ -53,14 +54,9 @@ export const getBookedTimesByDoctorAndDate = async (doctorId, date) => {
 export const getPatientsByDoctorEmail = async (email) => {
   try {
     // Recherche du médecin par e-mail
-    const doctor = await Doctor.findOne({ email });
-    if (doctor) {
-      console.log(doctor);
-      const patientDetails = await User.find({ _id: { $in: doctor.patients } });
-      return patientDetails;
-    } else {
-      throw new Error("Doctor not found");
-    }
+    return await Doctor.findOne({ email })
+      .populate("patients")
+      .select("-password -doctors");
   } catch (error) {
     throw new Error(error.message);
   }
