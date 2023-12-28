@@ -10,6 +10,7 @@ import {
 import { checkSchema } from "express-validator";
 import { expressjwt } from "express-jwt";
 import * as dotenv from "dotenv";
+import { checkSchemaValidityMiddleware } from "../middlewares/common.middleware.js";
 
 const router = Router();
 dotenv.config();
@@ -52,7 +53,7 @@ router.post("/loginAssistant",checkSchema(loginValidationSchema),loginAssistant)
 
 router.get(
   "/logout",
-  expressjwt({ secret: process.env.SECRET || 'Bearer', algorithms: ["HS256"] }),
+  expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),
   logoutAction
 );
 
