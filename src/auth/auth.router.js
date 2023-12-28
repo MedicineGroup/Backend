@@ -49,7 +49,7 @@ router.post("/signup", checkSchema(signupValidationSchema), signupAction);
 router.post("/signupAssistant", checkSchema(signupValidationSchema), signupAssistantAction);
 router.post("/login", checkSchema(loginValidationSchema), loginAction);
 router.post("/login-doctor",checkSchema(loginValidationSchema),loginDoctor)
-router.post("/loginAssistant",checkSchema(loginValidationSchema),loginAssistant)
+router.post("/loginAssistant",checkSchema(loginValidationSchema),checkSchemaValidityMiddleware,loginAssistant)
 
 router.get(
   "/logout",
