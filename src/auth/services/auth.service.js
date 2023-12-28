@@ -7,6 +7,7 @@ import { hashPassword } from "../../utils/auth.utils.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { findDoctorByEmail } from "../../doctor/dao/doctor.dao.js";
+import {Types} from "mongoose"
 
 export async function signupAction(request, response) {
   try {
@@ -40,10 +41,10 @@ export async function signupAssistantAction(request, response) {
     }
     const assistant = { ...request.body };
     assistant.password = await hashPassword(assistant.password);
+    assistant.doctor=new Types.ObjectId(assistant.doctor);
     const createdAssistant = await addAssistant(assistant);
     const { password, _id, __v, ...payload } = createdAssistant._doc;
-    const token = jwt.sign(payload, process.env.SECRET || "Bearer");
-    return response.status(201).json({ user: payload, token });
+    return response.status(201).json({ assistant: payload});
   } catch (error) {
     console.log(error);
     return response.status(500).json("An error occured in the server");
@@ -75,13 +76,14 @@ export async function loginAction(request, response) {
 export async function loginDoctor(request, response) {
   try {
     const doctor = await findDoctorByEmail(request.body.email);
+    console.log(doctor);
 
     const { compareSync } = bcrypt;
     if (!doctor || !compareSync(request.body.password, doctor.password)) {
       return response.status(401).json({ message: "Wrong credentials" });
     }
 
-    const { password, _id, __v, ...payload } = doctor._doc;
+    const { password, __v, ...payload } = doctor._doc;
 
     const token = jwt.sign(payload, process.env.SECRET || "Bearer");
     return response.status(200).json({ doctor: payload, token });
@@ -96,3 +98,36 @@ export async function loginDoctor(request, response) {
 export async function logoutAction(request, response) {
   return response.status(200).json({ message: "You are logged out" });
 }
+
+
+// Fonction asynchrone pour gérer l'action de connexion Assistant
+export async function loginAssistant(request, response) {
+  try {
+    // Recherche de l'utilisateur par son adresse e-mail
+    const assistant = await findAssistantByEmail(request.body.email);
+
+    // Vérifie si l'utilisateur existe ou si le mot de passe ne correspond pas
+    const { compareSync } = bcrypt;
+    if (!assistant || !compareSync(request.body.password, assistant.password)) {
+      // Retourne une réponse avec un statut 401 (Non autorisé) et un message d'erreur
+      return response.status(401).json({ message: "Wrong credentials" });
+    }
+
+    // Prépare les données à inclure dans le token JWT en excluant le mot de passe
+    const { password, _id, __v, ...payload } = assistant._doc;
+
+    // Génère un token JWT avec les données de l'utilisateur
+    const token = jwt.sign(payload, process.env.SECRET || 'Bearer');
+    // Retourne une réponse avec un statut 200 (OK) et le token généré
+    return response.status(200).json({ assistant: payload, token });
+  } catch (error) {
+    // En cas d'erreur, affiche l'erreur dans la console
+    console.log(error);
+
+    // Retourne une réponse avec un statut 500 (Erreur interne du serveur) et un message d'erreur
+    response
+      .status(500)
+      .json({ message: "An internal server error has occured" });
+  }
+}
+

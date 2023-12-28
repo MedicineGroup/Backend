@@ -4,9 +4,9 @@ import {
   generateAnalysisPrescription,
   generatePrescription,
   generateRadiologiePrescription,
-  getAllDoctorsByServices,
+ getAllConsultationsDoctor ,getAllDoctorsByServices,
   getPatientsByDoctorEmailService,
-} from "./services/doctor.service.js";
+, getDoctorById} from "./services/doctor.service.js";
 
 const router = express.Router();
 
@@ -15,5 +15,9 @@ router.get("/getPatientsByDoctorEmail", getPatientsByDoctorEmailService);
 router.post("/generate-prescription", generatePrescription);
 router.post("generate-analysis-prescription", generateAnalysisPrescription);
 router.post("generate-radiologie-prescription", generateRadiologiePrescription);
+router.get("/getDoctorById", getDoctorById);
+
+router.get("/getConsultations", getAllConsultationsDoctor);
+
 
 export { router };

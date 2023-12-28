@@ -2,13 +2,30 @@ import Consultation from "../models/consulation.model.js";
 import { CONSULTATION_STATE } from "../../utils/constantes.js";
 export const getAll = async (patientId) => {
   try {
-    return Consultation.find({ patient: patientId }).populate("doctor");
+    return Consultation.find({ patient: patientId }).populate("doctor patient");
   } catch (err) {
     console.log(err);
     throw new Error(err);
   }
 };
-
+export const getAllConstDoct = async (doctorId) => {
+  try {
+    return Consultation.find({ doctor: doctorId })
+    .populate("doctor")
+    .populate("patient");
+  } catch (err) {
+    console.log(err);
+    throw new Error(err);
+  }
+};
+export const findAllConsultationsAssitant = async (doctorId) => {
+  try {
+    return Consultation.find({ doctor: doctorId }).populate("doctor patient");
+  } catch (err) {
+    console.log(err);
+    throw new Error(err);
+  }
+};
 export const addConsultation = async (newConsultation) => {
   try {
     const consulation = new Consultation({ ...newConsultation });

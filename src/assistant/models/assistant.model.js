@@ -11,6 +11,10 @@ const Assistant = model(
     dateOfBirth: Date,
     address: String,
     gender: String,
+    doctor: {
+      type: Schema.Types.ObjectId,
+      ref: "Doctor",
+    },
   })
 );
 
