@@ -4,6 +4,8 @@ import {
   getPatientsByDoctorEmail,
   findDoctorById,
 } from "../dao/doctor.dao.js";
+import { Types } from "mongoose";
+
 
 export const getAllDoctorsByServices = async (req, res) => {
   try {
@@ -29,7 +31,7 @@ export const getPatientsByDoctorEmailService = async (req, res) => {
 export const getDoctorById = async (req, res) => {
   try {
     console.log("***********",req.query.id)
-    const doctor = await findDoctorById(req.query.id);
+    const doctor = await findDoctorById(new Types.ObjectId(req.query.id));
     res.status(200).json({ doctor });
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -6,6 +6,7 @@ const PdfDetailsSchema = new Schema(
   {
     pdf: String,
     title: String,
+    type: String,
     patient: {
         type: Schema.Types.ObjectId,
         ref:"User"
