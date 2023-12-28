@@ -5,8 +5,8 @@ import Consultation from "../../consultation/models/consulation.model.js";
 export const findDoctorByEmail = async (email) => {
   try {
     return await Doctor.findOne({ email })
-    .populate("patients")
-    .select("-password -doctors");
+      .populate("patients")
+      .select("-password -doctors");
   } catch (error) {
     console.log("Error in User DAO: findDoctorByEmail: ", error.message);
     throw new Error(error);
@@ -30,5 +30,16 @@ export const getPatientsByDoctorEmail = async (email) => {
       .select("-password -doctors");
   } catch (error) {
     throw new Error(error.message);
+  }
+};
+
+export const addPatient = async (doctorId, patientId) => {
+  try {
+    return await Doctor.findByIdAndUpdate(doctorId, {
+      $addToSet: { patients: patientId },
+    });
+  } catch (error) {
+    console.log("Error in doctor DAO: addPatient: ", error);
+    throw new Error(error);
   }
 };
