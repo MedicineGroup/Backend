@@ -18,6 +18,14 @@ export const getAllConstDoct = async (doctorId) => {
     throw new Error(err);
   }
 };
+export const findAllConsultationsAssitant = async (doctorId) => {
+  try {
+    return Consultation.find({ doctor: doctorId }).populate("doctor patient");
+  } catch (err) {
+    console.log(err);
+    throw new Error(err);
+  }
+};
 export const addConsultation = async (newConsultation) => {
   try {
     const consulation = new Consultation({ ...newConsultation });

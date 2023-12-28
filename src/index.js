@@ -22,6 +22,7 @@ import {
   getFiles,
 } from "./consultation/services/consultation.service.js";
 import { checkUserEmailExistance } from "./middlewares/user.middleware.js";
+import { addAnalyseAssistant } from "./assistant/services/assistant.service.js";
 
 const app = Express();
 dotenv.config();
@@ -51,6 +52,7 @@ app.use(
 );
 app.use(
   "/assistant",
+  expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),
   assistantRouter
 );
 
@@ -58,6 +60,11 @@ app.post(
   "/upload-files",
   expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),
   addAnalyse
+);
+app.post(
+  "/upload-filesAssistant",
+  expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),
+  addAnalyseAssistant
 );
 app.use("/files", Express.static("files"));
 app.get("/get-files", getFiles);
