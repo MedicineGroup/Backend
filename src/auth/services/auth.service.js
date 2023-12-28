@@ -7,6 +7,7 @@ import { hashPassword } from "../../utils/auth.utils.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { findDoctorByEmail } from "../../doctor/dao/doctor.dao.js";
+import {Types} from "mongoose"
 
 export async function signupAction(request, response) {
   try {
@@ -40,10 +41,10 @@ export async function signupAssistantAction(request, response) {
     }
     const assistant = { ...request.body };
     assistant.password = await hashPassword(assistant.password);
+    assistant.doctor=new Types.ObjectId(assistant.doctor);
     const createdAssistant = await addAssistant(assistant);
     const { password, _id, __v, ...payload } = createdAssistant._doc;
-    const token = jwt.sign(payload, process.env.SECRET || "Bearer");
-    return response.status(201).json({ user: payload, token });
+    return response.status(201).json({ assistant: payload});
   } catch (error) {
     console.log(error);
     return response.status(500).json("An error occured in the server");
@@ -81,7 +82,7 @@ export async function loginDoctor(request, response) {
       return response.status(401).json({ message: "Wrong credentials" });
     }
 
-    const { password, _id, __v, ...payload } = doctor._doc;
+    const { password, __v, ...payload } = doctor._doc;
 
     const token = jwt.sign(payload, process.env.SECRET || "Bearer");
     return response.status(200).json({ doctor: payload, token });
@@ -101,11 +102,6 @@ export async function logoutAction(request, response) {
 // Fonction asynchrone pour gérer l'action de connexion Assistant
 export async function loginAssistant(request, response) {
   try {
-    //verifier s'il y'a des erreurs dans les donnees envoyees
-    const errors = validationResult(request);
-    if (!errors.isEmpty()) {
-      return response.status(422).json({ errors: errors.array() });
-    }
     // Recherche de l'utilisateur par son adresse e-mail
     const assistant = await findAssistantByEmail(request.body.email);
 

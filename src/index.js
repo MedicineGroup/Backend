@@ -3,6 +3,8 @@ import { router as authRouter } from "./auth/auth.router.js";
 import { router as userRouter } from "./user/user.router.js";
 import { router as serviceRouter } from "./service/service.router.js";
 import { router as doctorRouter } from "./doctor/doctor.router.js";
+import { router as assistantRouter } from "./assistant/assistant.router.js";
+
 import cors from "cors";
 import connectToDB from "./config/db.config.js";
 import * as dotenv from "dotenv";
@@ -46,6 +48,10 @@ app.use(
   "/doctor",
   expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),
   doctorRouter
+);
+app.use(
+  "/assistant",
+  assistantRouter
 );
 
 app.post(
