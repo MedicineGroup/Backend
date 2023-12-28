@@ -28,7 +28,7 @@ export const getPatientsByDoctorEmail = async (email) => {
     // Recherche du médecin par e-mail
     return await Doctor.findOne({ email })
       .populate("patients")
-      .select("-password -doctors");
+      .select("-doctors");
   } catch (error) {
     throw new Error(error.message);
   }

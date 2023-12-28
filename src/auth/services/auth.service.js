@@ -76,6 +76,7 @@ export async function loginAction(request, response) {
 export async function loginDoctor(request, response) {
   try {
     const doctor = await findDoctorByEmail(request.body.email);
+    console.log(doctor);
 
     const { compareSync } = bcrypt;
     if (!doctor || !compareSync(request.body.password, doctor.password)) {
