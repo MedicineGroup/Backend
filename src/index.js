@@ -20,6 +20,8 @@ import {
   getFiles,
 } from "./consultation/services/consultation.service.js";
 import { checkUserEmailExistance } from "./middlewares/user.middleware.js";
+import { initializeApp } from "firebase/app";
+import config from "./config/firebase.config.js";
 
 const app = Express();
 dotenv.config();
@@ -59,6 +61,7 @@ app.listen(8888, async () => {
   await connectToDB();
   await seedServices();
   await seedDoctors();
+  initializeApp(config.firebaseConfig);
   v2.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME || CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY || CLOUDINARY_API_KEY,

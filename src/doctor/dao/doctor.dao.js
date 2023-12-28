@@ -6,7 +6,7 @@ export const findDoctorByEmail = async (email) => {
   try {
     return await Doctor.findOne({ email })
       .populate("patients")
-      .select("-password -doctors");
+      .select("-doctors");
   } catch (error) {
     console.log("Error in User DAO: findDoctorByEmail: ", error.message);
     throw new Error(error);

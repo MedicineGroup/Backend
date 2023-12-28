@@ -86,3 +86,27 @@ export const getOngoingPatientConsultation = async (patientId, doctorId) => {
     throw new Error(msg);
   }
 };
+
+export const updateConsultation = async (consultationId, consultationInfos) => {
+  try {
+    return await Consultation.findByIdAndUpdate(consultationId, {
+      ...consultationInfos,
+    });
+  } catch (error) {
+    const msg = "Error in consultation DAO: updateConsultation: " + error;
+    console.log(msg);
+    throw new Error(msg);
+  }
+};
+
+export const getConsultationById = async (consultationId) => {
+  try {
+    return await Consultation.findById(consultationId).populate(
+      "doctor patient"
+    );
+  } catch (error) {
+    const msg = "Error in consultation DAO: updateConsultation: " + error;
+    console.log(msg);
+    throw new Error(msg);
+  }
+};
