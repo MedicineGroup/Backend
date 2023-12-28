@@ -12,8 +12,7 @@ export async function getAllConsultations(request, response) {
   try {
     const userEmail = request.auth.email;
     const patient = await findUserByEmail(userEmail);
-    console.log(patient);
-    const consultations = await getAll(patient._id);
+    const consultations = await getAll(new Types.ObjectId(patient._id));
     return response.status(200).json({ consultations });
   } catch (error) {
     console.log(error);

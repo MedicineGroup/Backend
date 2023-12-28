@@ -18,7 +18,9 @@ export const getPatientsByDoctorEmailService = async (req, res) => {
   try {
     const { email } = req.query; // Assurez-vous que doctorEmail est passé en tant que paramètre dans votre route
 
-    const patients = await getPatientsByDoctorEmail(email);
+    const doctor = await getPatientsByDoctorEmail(email);
+    const patients = doctor.patients;
+
     res.status(200).json({ patients });
   } catch (error) {
     res.status(500).json({ error: error.message });
