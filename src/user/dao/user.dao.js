@@ -30,3 +30,25 @@ export const update = async (email, userInfos) => {
     throw new Error(error);
   }
 };
+
+export const addDoctor = async (userId, doctorId) => {
+  try {
+    return await User.findByIdAndUpdate(userId, {
+      $addToSet: { doctors: doctorId },
+    });
+  } catch (error) {
+    console.log("Error in User DAO: addDoctor: ", error);
+    throw new Error(error);
+  }
+};
+
+export const getDoctorsByUserEmail = async (email) => {
+  try {
+    return await User.findOne({ email })
+      .populate("doctors")
+      .select("-password -patients");
+  } catch (error) {
+    console.log("Error in User DAO: getDoctorsByUserEmail: ", error);
+    throw new Error(error);
+  }
+};
