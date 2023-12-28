@@ -33,6 +33,17 @@ export const getPatientsByDoctorEmail = async (email) => {
     throw new Error(error.message);
   }
 };
+
+export const addPatient = async (doctorId, patientId) => {
+  try {
+    return await Doctor.findByIdAndUpdate(doctorId, {
+      $addToSet: { patients: patientId },
+    });
+  } catch (error) {
+    console.log("Error in doctor DAO: addPatient: ", error);
+    throw new Error(error);
+  }
+};
 export const findDoctorById = async (id) => {
   try {
     return await Doctor.find({ _id: new Types.ObjectId(id) });
