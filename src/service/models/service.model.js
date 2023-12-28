@@ -37,13 +37,21 @@ const servicesData = [
 
 export const seedServices = async () => {
   try {
-    await Service.deleteMany();
-    servicesData.forEach(async (serviceData) => {
+    const existingServices = await Service.find();
+
+    if (existingServices.length > 0) {
+      console.log("Services data already exists. Skipping seeding.");
+      return;
+    }
+
+    for (const serviceData of servicesData) {
       const service = new Service(serviceData);
       await service.save();
-    });
+    }
+
     console.log("Services inserted successfully");
   } catch (error) {
     console.log(error);
   }
 };
+
