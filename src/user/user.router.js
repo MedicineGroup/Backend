@@ -10,6 +10,7 @@ import {
   getFullBookedDatesByDoctorId,
   bookedTimesByDoctorAndDate,
   bookConsultation,
+  getUserDoctor,
 } from "./services/user.service.js";
 import multer from "multer";
 import { checkSchemaValidityMiddleware } from "../middlewares/common.middleware.js";
@@ -52,11 +53,21 @@ const appointmentDataSchema = {
     isString: true,
     errorMessage: "doctor is required",
   },
-  time: {
+  startTime: {
     isString: true,
     errorMessage: "time is required",
   },
-  date: {},
+  date: {
+    custom: {
+      options: (value) => {
+        if (!Date.parse(value)) {
+          throw new Error("Invalid date format");
+        }
+        return true;
+      },
+    },
+    errorMessage: "date is required",
+  },
 };
 
 router.post(
@@ -78,7 +89,14 @@ router.get("/fully-booked-dates", getFullBookedDatesByDoctorId);
 
 router.get("/booked-times", bookedTimesByDoctorAndDate);
 
-router.post("/save-appointment", bookConsultation);
+router.get("/doctors", getUserDoctor);
+
+router.post(
+  "/save-appointment",
+  checkSchema(appointmentDataSchema),
+  checkSchemaValidityMiddleware,
+  bookConsultation
+);
 
 
 

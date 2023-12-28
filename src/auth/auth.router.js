@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   loginAction,
+  loginAssistant,
   loginDoctor,
   logoutAction,
   signupAction,
@@ -44,30 +45,12 @@ const loginValidationSchema = {
   },
 };
 
-router.post(
-  "/signup",
-  checkSchema(signupValidationSchema),
-  checkSchemaValidityMiddleware,
-  signupAction
-);
-router.post(
-  "/signupAssistant",
-  checkSchema(signupValidationSchema),
-  checkSchemaValidityMiddleware,
-  signupAssistantAction
-);
-router.post(
-  "/login",
-  checkSchema(loginValidationSchema),
-  checkSchemaValidityMiddleware,
-  loginAction
-);
-router.post(
-  "/login-doctor",
-  checkSchema(loginValidationSchema),
-  checkSchemaValidityMiddleware,
-  loginDoctor
-);
+router.post("/signup", checkSchema(signupValidationSchema), signupAction);
+router.post("/signupAssistant", checkSchema(signupValidationSchema), signupAssistantAction);
+router.post("/login", checkSchema(loginValidationSchema), loginAction);
+router.post("/login-doctor",checkSchema(loginValidationSchema),loginDoctor)
+router.post("/loginAssistant",checkSchema(loginValidationSchema),loginAssistant)
+
 router.get(
   "/logout",
   expressjwt({ secret: process.env.SECRET || "Bearer", algorithms: ["HS256"] }),
