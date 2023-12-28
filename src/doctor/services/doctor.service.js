@@ -1,8 +1,12 @@
 // services/doctor.service.js
+import { getAllConstDoct } from "../../consultation/dao/consultation.dao.js";
 import {
   getAllDoctorsByService,
   getPatientsByDoctorEmail,
+  findDoctorByEmail,
 } from "../dao/doctor.dao.js";
+import { Types } from "mongoose";
+
 
 export const getAllDoctorsByServices = async (req, res) => {
   try {
@@ -26,3 +30,17 @@ export const getPatientsByDoctorEmailService = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export async function getAllConsultationsDoctor(request, response) {
+  try {
+    const userEmail = request.auth.email;
+    const doctor = await findDoctorByEmail(userEmail);
+    const consultations = await getAllConstDoct(new Types.ObjectId(doctor._id));
+    return response.status(200).json({ consultations });
+  } catch (error) {
+    console.log(error);
+    response.status(500).send({
+      message: "An internal Server error has occured",
+    });
+  }
+}

@@ -80,4 +80,6 @@ router.get("/booked-times", bookedTimesByDoctorAndDate);
 
 router.post("/save-appointment", bookConsultation);
 
+
+
 export { router };

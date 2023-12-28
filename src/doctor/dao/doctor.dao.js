@@ -2,11 +2,12 @@
 import Doctor from "../models/doctor.model.js";
 import Consultation from "../../consultation/models/consulation.model.js";
 
+
 export const findDoctorByEmail = async (email) => {
   try {
     return await Doctor.findOne({ email })
     .populate("patients")
-    .select("-password -doctors");
+    .select("-doctors");
   } catch (error) {
     console.log("Error in User DAO: findDoctorByEmail: ", error.message);
     throw new Error(error);
@@ -27,8 +28,9 @@ export const getPatientsByDoctorEmail = async (email) => {
     // Recherche du médecin par e-mail
     return await Doctor.findOne({ email })
       .populate("patients")
-      .select("-password -doctors");
+      .select("-doctors");
   } catch (error) {
     throw new Error(error.message);
   }
 };
+
