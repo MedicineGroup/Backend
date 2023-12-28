@@ -2,6 +2,7 @@
 import {
   getAllDoctorsByService,
   getPatientsByDoctorEmail,
+  findDoctorById,
 } from "../dao/doctor.dao.js";
 
 export const getAllDoctorsByServices = async (req, res) => {
@@ -20,6 +21,16 @@ export const getPatientsByDoctorEmailService = async (req, res) => {
 
     const patients = await getPatientsByDoctorEmail(email);
     res.status(200).json({ patients });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getDoctorById = async (req, res) => {
+  try {
+    console.log("***********",req.query.id)
+    const doctor = await findDoctorById(req.query.id);
+    res.status(200).json({ doctor });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
