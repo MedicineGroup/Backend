@@ -31,6 +31,8 @@ export async function getAllConsultations(request, response) {
   }
 }
 
+
+
 export const updateUserInfos = async (request, response) => {
   try {
     const { dateOfBirth, address, gender } = request.body;

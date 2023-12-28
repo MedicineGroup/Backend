@@ -8,7 +8,16 @@ export const getAll = async (patientId) => {
     throw new Error(err);
   }
 };
-
+export const getAllConstDoct = async (doctorId) => {
+  try {
+    return Consultation.find({ doctor: doctorId })
+    .populate("doctor")
+    .populate("patient");
+  } catch (err) {
+    console.log(err);
+    throw new Error(err);
+  }
+};
 export const addConsultation = async (newConsultation) => {
   try {
     const consulation = new Consultation({ ...newConsultation });
