@@ -98,12 +98,19 @@ const doctorsData = [
 
 export const seedDoctors = async () => {
   try {
-    await Doctor.deleteMany();
-    doctorsData.forEach(async (doctorData) => {
+    const existingDoctors = await Doctor.find();
+
+    if (existingDoctors.length > 0) {
+      console.log("Doctor data already exists. Skipping seeding.");
+      return;
+    }
+
+    for (const doctorData of doctorsData) {
       doctorData.password = await hashPassword(doctorData.password);
       const doctor = new Doctor(doctorData);
       await doctor.save();
-    });
+    }
+
     console.log("Doctor data seeded");
   } catch (error) {
     console.log(error);

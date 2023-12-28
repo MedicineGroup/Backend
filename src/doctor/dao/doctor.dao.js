@@ -5,7 +5,9 @@ import Consultation from "../../consultation/models/consulation.model.js";
 
 export const findDoctorByEmail = async (email) => {
   try {
-    return await Doctor.findOne({ email });
+    return await Doctor.findOne({ email })
+    .populate("patients")
+    .select("-password -doctors");
   } catch (error) {
     console.log("Error in User DAO: findDoctorByEmail: ", error.message);
     throw new Error(error);
