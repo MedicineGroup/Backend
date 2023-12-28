@@ -47,6 +47,18 @@ const userInfosValidationSchema = {
   },
 };
 
+const appointmentDataSchema = {
+  doctor: {
+    isString: true,
+    errorMessage: "doctor is required",
+  },
+  time: {
+    isString: true,
+    errorMessage: "time is required",
+  },
+  date: {},
+};
+
 router.post(
   "/update-infos",
   checkSchema(userInfosValidationSchema),

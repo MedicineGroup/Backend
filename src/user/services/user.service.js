@@ -11,8 +11,9 @@ import { Types } from "mongoose";
 export async function getAllConsultations(request, response) {
   try {
     const userEmail = request.auth.email;
-    const patient = findUserByEmail(userEmail);
-    const consultations = await getAll(patient);
+    const patient = await findUserByEmail(userEmail);
+    console.log(patient);
+    const consultations = await getAll(patient._id);
     return response.status(200).json({ consultations });
   } catch (error) {
     console.log(error);

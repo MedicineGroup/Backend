@@ -1,7 +1,7 @@
 import Consultation from "../models/consulation.model.js";
-export const getAll = async (patient) => {
+export const getAll = async (patientId) => {
   try {
-    return Consultation.find({ patient: patient._id }).populate("doctor");
+    return Consultation.find({ patient: patientId }).populate("doctor");
   } catch (err) {
     console.log(err);
     throw new Error(err);
