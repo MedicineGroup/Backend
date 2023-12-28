@@ -2,7 +2,7 @@ import Consultation from "../models/consulation.model.js";
 import { CONSULTATION_STATE } from "../../utils/constantes.js";
 export const getAll = async (patientId) => {
   try {
-    return Consultation.find({ patient: patientId }).populate("doctor");
+    return Consultation.find({ patient: patientId }).populate("doctor patient");
   } catch (err) {
     console.log(err);
     throw new Error(err);
