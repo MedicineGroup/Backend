@@ -8,8 +8,6 @@ import {
 } from "../dao/doctor.dao.js";
 import { Types } from "mongoose";
 
-import { Types } from "mongoose";
-
 
 export const getAllDoctorsByServices = async (req, res) => {
   try {
