@@ -1,6 +1,9 @@
 import multer from "multer";
 import PdfDetails from "../../pdfDetails.js";
 import { findUserByEmail } from "../../user/dao/user.dao.js";
+import {Types} from "mongoose"
+
+
 
 export const addAnalyse = async (req, res) => {
   const email = req.auth.email;
@@ -29,8 +32,9 @@ export const addAnalyse = async (req, res) => {
       console.log(req.file);
       const title = req.body.title;
       const fileName = req.file.filename;
+      const type = req.body.type;
       try {
-        const pdfDetails = await PdfDetails.create({ title, pdf: fileName, patient: user._id });
+        const pdfDetails = await PdfDetails.create({ title, pdf: fileName, patient: user._id, type });
         res.send({ status: "ok", pdfDetails });
       } catch (error) {
         res.json({ status: error.message });
@@ -43,7 +47,8 @@ export const addAnalyse = async (req, res) => {
 
 export const getFiles = async (req, res) => {
     try {
-      PdfDetails.find({}).then((data) => {
+      const patientId= req.query.id
+      PdfDetails.find({patient: new Types.ObjectId(patientId)}).then((data) => {
         res.send({ status: "ok", data: data });
       });
     } catch (error) {}
