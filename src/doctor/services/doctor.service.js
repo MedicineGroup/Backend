@@ -6,8 +6,22 @@ import {
   findDoctorByEmail,
   findDoctorById,
 } from "../dao/doctor.dao.js";
+import {
+  generateAnalysisAndRadiologiePrescription,
+  generateTreatmentPrescriptionPDF,
+} from "../pdf-generation/generate-pdf.js";
+import {
+  getConsultationById,
+  updateConsultation,
+} from "../../consultation/dao/consultation.dao.js";
+import {
+  getStorage,
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+} from "firebase/storage";
+import fs from "fs";
 import { Types } from "mongoose";
-
 
 export const getAllDoctorsByServices = async (req, res) => {
   try {
@@ -32,9 +46,124 @@ export const getPatientsByDoctorEmailService = async (req, res) => {
   }
 };
 
+export const generatePrescription = async (request, response) => {
+  try {
+    const { consultationId } = request.body;
+    const { medicines } = request.body;
+    const consultation = await getConsultationById(
+      new Types.ObjectId(consultationId)
+    );
+    const name = `${consultation.patient.lastname} ${consultation.patient.firstname}`;
+    const filename = await generateTreatmentPrescriptionPDF(medicines, name);
+    const storage = getStorage();
+    const storageRef = ref(storage, `files/${filename}`);
+
+    const fileBlob = fs.readFileSync(
+      `D:/Learning/Semestre 5/Bases de Données Objet Relationnelles/Projects/hospital-project/Backend/src/doctor/generated-pdfs/${filename}`
+    );
+    const snapshot = await uploadBytesResumable(storageRef, fileBlob, {
+      contentType: "application/pdf",
+    });
+
+    const downloadURL = await getDownloadURL(snapshot.ref);
+    await updateConsultation(consultationId, {
+      prescription: downloadURL,
+    });
+    return response.status(200).json({ prescription: downloadURL });
+  } catch (error) {
+    console.log(error);
+    response
+      .status(500)
+      .json({ message: "An internal server error has occured" });
+  }
+};
+
+export const generateAnalysisPrescription = async (request, response) => {
+  try {
+    const { consultationId } = request.body;
+    const { analysis } = request.body;
+    const consultation = await getConsultationById(
+      new Types.ObjectId(consultationId)
+    );
+    const name = `${consultation.patient.lastname} ${consultation.patient.firstname}`;
+    const filename = await generateAnalysisAndRadiologiePrescription(
+      name,
+      analysis
+    );
+    const storage = getStorage();
+    const storageRef = ref(storage, `files/${filename}`);
+
+    const fileBlob = fs.readFileSync(
+      `D:/Learning/Semestre 5/Bases de Données Objet Relationnelles/Projects/hospital-project/Backend/src/doctor/generated-pdfs/${filename}`
+    );
+    const snapshot = await uploadBytesResumable(storageRef, fileBlob, {
+      contentType: "application/pdf",
+    });
+
+    const downloadURL = await getDownloadURL(snapshot.ref);
+    await updateConsultation(consultationId, {
+      analysis: { prescription: downloadURL },
+    });
+    return response.status(200).json({ analysisPrescription: downloadURL });
+  } catch (error) {
+    console.log(error);
+    response
+      .status(500)
+      .json({ message: "An internal server error has occured" });
+  }
+};
+
+export const generateRadiologiePrescription = async (request, response) => {
+  try {
+    const { consultationId } = request.body;
+    const { radiologie } = request.body;
+    const consultation = await getConsultationById(
+      new Types.ObjectId(consultationId)
+    );
+    const name = `${consultation.patient.lastname} ${consultation.patient.firstname}`;
+    const filename = await generateAnalysisAndRadiologiePrescription(
+      name,
+      radiologie
+    );
+    const storage = getStorage();
+    const storageRef = ref(storage, `files/${filename}`);
+
+    const fileBlob = fs.readFileSync(
+      `D:/Learning/Semestre 5/Bases de Données Objet Relationnelles/Projects/hospital-project/Backend/src/doctor/generated-pdfs/${filename}`
+    );
+    const snapshot = await uploadBytesResumable(storageRef, fileBlob, {
+      contentType: "application/pdf",
+    });
+
+    const downloadURL = await getDownloadURL(snapshot.ref);
+    await updateConsultation(consultationId, {
+      radiologie: { prescription: downloadURL },
+    });
+    return response.status(200).json({ radiologiePrescription: downloadURL });
+  } catch (error) {
+    console.log(error);
+    response
+      .status(500)
+      .json({ message: "An internal server error has occured" });
+  }
+};
+
+export const addNotesToConsultation = async (request, response) => {
+  try {
+    const { consultationId, notes } = request.body;
+    const consultation = await updateConsultation(consultationId, { notes });
+    return response.status(200).json({ notes });
+  } catch (error) {
+    console.log(error);
+    response
+      .status(500)
+      .json({ message: "An internal server error has occured" });
+  }
+};
+
 export const getDoctorById = async (req, res) => {
   try {
-    console.log("***********",req.query.id)
+    console.log("***********", req.query.id);
     const doctor = await findDoctorById(new Types.ObjectId(req.query.id));
     res.status(200).json({ doctor });
   } catch (error) {

@@ -1,13 +1,13 @@
 // dao/doctor.dao.js
 import Doctor from "../models/doctor.model.js";
 import Consultation from "../../consultation/models/consulation.model.js";
-import {Types} from "mongoose"
+import { Types } from "mongoose";
 
 export const findDoctorByEmail = async (email) => {
   try {
     return await Doctor.findOne({ email })
-    .populate("patients")
-    .select("-doctors");
+      .populate("patients")
+      .select("-doctors");
   } catch (error) {
     console.log("Error in User DAO: findDoctorByEmail: ", error.message);
     throw new Error(error);
