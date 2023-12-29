@@ -6,7 +6,6 @@ import {
   findDoctorByEmail,
   findDoctorById,
 } from "../dao/doctor.dao.js";
-import { v2 } from "cloudinary";
 import {
   generateAnalysisAndRadiologiePrescription,
   generateTreatmentPrescriptionPDF,
@@ -15,7 +14,6 @@ import {
   getConsultationById,
   updateConsultation,
 } from "../../consultation/dao/consultation.dao.js";
-import { Types } from "mongoose";
 import {
   getStorage,
   ref,
@@ -162,30 +160,6 @@ export const addNotesToConsultation = async (request, response) => {
       .json({ message: "An internal server error has occured" });
   }
 };
-
-export const getDoctorById = async (req, res) => {
-  try {
-    console.log("***********", req.query.id);
-    const doctor = await findDoctorById(new Types.ObjectId(req.query.id));
-    res.status(200).json({ doctor });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export async function getAllConsultationsDoctor(request, response) {
-  try {
-    const userEmail = request.auth.email;
-    const doctor = await findDoctorByEmail(userEmail);
-    const consultations = await getAllConstDoct(new Types.ObjectId(doctor._id));
-    return response.status(200).json({ consultations });
-  } catch (error) {
-    console.log(error);
-    response.status(500).send({
-      message: "An internal Server error has occured",
-    });
-  }
-}
 
 export const getDoctorById = async (req, res) => {
   try {
